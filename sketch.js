@@ -30,6 +30,17 @@ let currently_typed  = "";     // what the user has typed so far
 let entered          = new Array(2); // array to store the result of the two trials (i.e., the two phrases entered in one attempt)
 let CPS              = 0;      // add the characters per second (CPS) here (once for every attempt)
 
+let draw_Options = false;
+let drawSymbs = false;
+let drawABC = false;
+let drawDEF = false;
+let drawGHI = false;
+let drawJKL = false;
+let drawMNO = false;
+let drawPQRS = false;
+let drawTUV = false;
+let drawWXYZ = false;
+
 // Metrics
 let attempt_start_time, attempt_end_time; // attemps start and end times (includes both trials)
 let trial_end_time;            // the timestamp of when the lastest trial was completed
@@ -80,7 +91,7 @@ function draw()
     
     drawArmAndWatch();         // draws arm and watch background
     writeTargetAndEntered();   // writes the target and entered phrases above the watch
-    drawACCEPT();              // draws the 'ACCEPT' button that submits a phrase and completes a trial
+    drawACCEPT();             // draws the 'ACCEPT' button that submits a phrase and completes a trial
     
     // Draws the non-interactive screen area (4x1cm) -- DO NOT CHANGE SIZE!
     noStroke();
@@ -96,10 +107,56 @@ function draw()
     noFill();
     rect(width/2 - 2.0*PPCM, height/2 - 1.0*PPCM, 4.0*PPCM, 3.0*PPCM);
 
-    draw2Dkeyboard();       // draws our basic 2D keyboard UI
+    if(!draw_Options){
+      //draw2Dkeyboard();       // draws our basic 2D keyboard UI
+      draw2Dkeyboard_v2();
+    }
+    else{
+      drawOptions();
+    }
 
     drawFatFinger();        // draws the finger that simulates the 'fat finger' problem
   }
+}
+
+function draw2Dkeyboard_v2()
+{
+  draw_grid();
+  
+  draw_letters();
+}
+
+function draw_letters()
+{
+  textAlign(CENTER);
+  textFont("Arial", 15);
+  fill(0);
+  
+  text("← ' ⎵", width/2 - (4/3)*PPCM, height/2 - (PPCM/2) + 5);
+  
+  text("a b c", width/2, height/2 - (PPCM/2) + 5);
+  
+  text("d e f", width/2 + (4/3)*PPCM, height/2 - (PPCM/2) + 5);
+  
+  text("g h i", width/2 - (4/3)*PPCM, height/2 + PPCM/2 + 5);
+  
+  text("j k l", width/2 , height/2 + PPCM/2 + 5);
+  
+  text("m n o", width/2 + (4/3)*PPCM, height/2 + PPCM/2 + 5);
+
+  text("p q r s", width/2 - (4/3)*PPCM, height/2 + (3*PPCM)/2 + 5);
+
+  text("t u v", width/2 , height/2 + (3*PPCM)/2 + 5);
+
+  text("w x y z", width/2 + (4/3)*PPCM, height/2 + (3*PPCM)/2 + 5);
+}
+
+function draw_grid(){
+  line(width/2 - (2/3)*PPCM, height/2- PPCM, width/2 - (2/3)*PPCM, height/2 + 2*PPCM);
+  line(width/2 + (2/3)*PPCM, height/2- PPCM, width/2 + (2/3)*PPCM, height/2 + 2*PPCM);
+  
+  line(width/2 - 2.0*PPCM, height/2 , width/2 + 2.0*PPCM, height/2);
+  line(width/2 - 2.0*PPCM, height/2 + PPCM , width/2 + 2.0*PPCM, height/2 + PPCM);
 }
 
 // Draws 2D keyboard UI (current letter and left and right arrows)
@@ -117,6 +174,77 @@ function draw2Dkeyboard()
   image(rightArrow, width/2, height/2, ARROW_SIZE, ARROW_SIZE);  
 }
 
+function drawOptions()
+{
+  line(width/2 - PPCM, height/2- PPCM, width/2 - PPCM, height/2 + 2*PPCM);
+  line(width/2 + PPCM/2, height/2- PPCM, width/2 + PPCM/2, height/2 + 2*PPCM); 
+  
+  line(width/2 - 2*PPCM, height/2 + PPCM/2, width/2 + 2*PPCM, height/2 + PPCM/2);
+  
+  textAlign(CENTER);
+  textFont("Arial", 25);
+  fill(0);
+  
+  text("X", width/2 - (3*PPCM)/2, height/2 - PPCM/4 + 8.5);
+  
+  if(drawSymbs)
+  {
+    text("←", width/2 - (1/4)*PPCM, height/2 - (PPCM/4) + 7);
+    text("'", width/2 + (5/4)*PPCM, height/2 - (PPCM/4) + 7);
+    text("⎵", width/2 - (1/4)*PPCM, height/2 + ((5*PPCM)/4) + 7);
+  }
+  else if(drawABC)
+  {
+    text("a", width/2 - (1/4)*PPCM, height/2 - (PPCM/4) + 8.5);
+    text("b", width/2 + (5/4)*PPCM, height/2 - (PPCM/4) + 8.5);
+    text("c", width/2 - (1/4)*PPCM, height/2 + ((5*PPCM)/4) + 8.5);      
+  }
+  else if(drawDEF)
+  {
+    text("d", width/2 - (1/4)*PPCM, height/2 - (PPCM/4) + 8.5);
+    text("e", width/2 + (5/4)*PPCM, height/2 - (PPCM/4) + 8.5);
+    text("f", width/2 - (1/4)*PPCM, height/2 + ((5*PPCM)/4) + 8.5);    
+  }
+  else if(drawGHI)
+  {
+    text("g", width/2 - (1/4)*PPCM, height/2 - (PPCM/4) + 8.5);
+    text("h", width/2 + (5/4)*PPCM, height/2 - (PPCM/4) + 8.5);
+    text("i", width/2 - (1/4)*PPCM, height/2 + ((5*PPCM)/4) + 8.5);    
+  }
+  else if(drawJKL)
+  {
+    text("j", width/2 - (1/4)*PPCM, height/2 - (PPCM/4) + 8.5);
+    text("k", width/2 + (5/4)*PPCM, height/2 - (PPCM/4) + 8.5);
+    text("l", width/2 - (1/4)*PPCM, height/2 + ((5*PPCM)/4) + 8.5);    
+  }
+  else if(drawMNO)
+  {
+    text("m", width/2 - (1/4)*PPCM, height/2 - (PPCM/4) + 8.5);
+    text("n", width/2 + (5/4)*PPCM, height/2 - (PPCM/4) + 8.5);
+    text("o", width/2 - (1/4)*PPCM, height/2 + ((5*PPCM)/4) + 8.5);    
+  }
+  else if(drawPQRS)
+  {
+    text("p", width/2 - (1/4)*PPCM, height/2 - (PPCM/4) + 8.5);
+    text("q", width/2 + (5/4)*PPCM, height/2 - (PPCM/4) + 8.5);
+    text("r", width/2 - (1/4)*PPCM, height/2 + ((5*PPCM)/4) + 8.5); 
+    text("s", width/2 + (5/4)*PPCM, height/2 + ((5*PPCM)/4) + 8.5);
+  }
+  else if(drawTUV)
+  {
+    text("t", width/2 - (1/4)*PPCM, height/2 - (PPCM/4) + 8.5);
+    text("u", width/2 + (5/4)*PPCM, height/2 - (PPCM/4) + 8.5);
+    text("v", width/2 - (1/4)*PPCM, height/2 + ((5*PPCM)/4) + 8.5);    
+  }
+  else if(drawWXYZ)
+  {
+    text("w", width/2 - (1/4)*PPCM, height/2 - (PPCM/4) + 8.5);
+    text("x", width/2 + (5/4)*PPCM, height/2 - (PPCM/4) + 8.5);
+    text("y", width/2 - (1/4)*PPCM, height/2 + ((5*PPCM)/4) + 8.5); 
+    text("z", width/2 + (5/4)*PPCM, height/2 + ((5*PPCM)/4) + 8.5);
+  }
+}
+
 // Evoked when the mouse button was pressed
 function mousePressed()
 {
@@ -125,26 +253,143 @@ function mousePressed()
   {                   
     // Check if mouse click happened within the touch input area
     if(mouseClickWithin(width/2 - 2.0*PPCM, height/2 - 1.0*PPCM, 4.0*PPCM, 3.0*PPCM))  
-    {      
-      // Check if mouse click was on left arrow (2D keyboard)
-      if (mouseClickWithin(width/2 - ARROW_SIZE, height/2, ARROW_SIZE, ARROW_SIZE))
+    {
+      if(!draw_Options)
       {
-        current_letter = getPreviousChar(current_letter);
-        if (current_letter.charCodeAt(0) < '_'.charCodeAt(0)) current_letter = 'z';  // wrap around to z
-      }
-      // Check if mouse click was on right arrow (2D keyboard)
-      else if (mouseClickWithin(width/2, height/2, ARROW_SIZE, ARROW_SIZE))
-      {
-        current_letter = getNextChar(current_letter);
-        if (current_letter.charCodeAt(0) > 'z'.charCodeAt(0)) current_letter = '_'; // wrap back to space (i.e., the underscore)
+        if(mouseClickWithin(width/2 - 2*PPCM, height/2 - PPCM, (4*PPCM)/3, PPCM))
+          drawSymbs = true;
+        
+        else if( mouseClickWithin(width/2 - (2/3)*PPCM, height/2 - PPCM, (4*PPCM)/3, PPCM))
+          drawABC = true;
+        
+        else if(mouseClickWithin(width/2 + (2/3)*PPCM, height/2 - PPCM, (4*PPCM)/3, PPCM))
+          drawDEF = true;
+
+        else if(mouseClickWithin(width/2 - 2*PPCM, height/2 , (4*PPCM)/3, PPCM))
+          drawGHI = true;
+        
+        else if(mouseClickWithin(width/2 - (2/3)*PPCM, height/2 , (4*PPCM)/3, PPCM))
+          drawJKL = true;
+
+        else if(mouseClickWithin(width/2 + (2/3)*PPCM, height/2 , (4*PPCM)/3, PPCM))
+          drawMNO = true;
+
+        else if(mouseClickWithin(width/2 - 2*PPCM, height/2 + PPCM, (4*PPCM)/3, PPCM))
+          drawPQRS = true;
+
+        else if(mouseClickWithin(width/2 - (2/3)*PPCM, height/2 + PPCM, (4*PPCM)/3, PPCM))
+          drawTUV = true;
+        
+        else if(mouseClickWithin(width/2 + (2/3)*PPCM, height/2 + PPCM, (4*PPCM)/3, PPCM))
+          drawWXYZ = true;
+        
+        draw_Options = true;
+
+          /*else if (current_letter == '`' && currently_typed.length > 0)               // if `, treat that as delete
+            currently_typed = currently_typed.substring(0, currently_typed.length - 1);
+  */
       }
       else
       {
-        // Click in whitespace indicates a character input (2D keyboard)
-        if (current_letter == '_') currently_typed += " ";                          // if underscore, consider that a space bar
-        else if (current_letter == '`' && currently_typed.length > 0)               // if `, treat that as delete
-          currently_typed = currently_typed.substring(0, currently_typed.length - 1);
-        else if (current_letter != '`') currently_typed += current_letter;          // if not any of the above cases, add the current letter to the entered phrase
+        if(mouseClickWithin(width/2 - 2.0*PPCM, height/2 - 1.0*PPCM, 4.0*PPCM, 3.0*PPCM))
+        {
+          if(drawSymbs)
+          {
+            if(mouseClickWithin(width/2 - PPCM, height/2 - PPCM, (3/2)*PPCM, (3/2)*PPCM))
+              currently_typed = currently_typed.substring(0, currently_typed.length - 1);
+            else if(mouseClickWithin(width/2 + (1/2)*PPCM, height/2 - PPCM, (3/2)*PPCM, (3/2)*PPCM))
+              currently_typed += "'";
+            else if(mouseClickWithin(width/2 - PPCM, height/2 + (1/2)*PPCM, (3/2)*PPCM, (3/2)*PPCM))
+              currently_typed += ' ';        
+          }
+          else if(drawABC)
+          {
+            if(mouseClickWithin(width/2 - PPCM, height/2 - PPCM, (3/2)*PPCM, (3/2)*PPCM))
+              currently_typed += 'a';
+            else if(mouseClickWithin(width/2 + (1/2)*PPCM, height/2 - PPCM, (3/2)*PPCM, (3/2)*PPCM))
+              currently_typed += 'b';
+            else if(mouseClickWithin(width/2 - PPCM, height/2 + (1/2)*PPCM, (3/2)*PPCM, (3/2)*PPCM))
+              currently_typed += 'c';
+          }
+          else if(drawDEF)
+          {
+            if(mouseClickWithin(width/2 - PPCM, height/2 - PPCM, (3/2)*PPCM, (3/2)*PPCM))
+              currently_typed += 'd';
+            else if(mouseClickWithin(width/2 + (1/2)*PPCM, height/2 - PPCM, (3/2)*PPCM, (3/2)*PPCM))
+              currently_typed += 'e';
+            else if(mouseClickWithin(width/2 - PPCM, height/2 + (1/2)*PPCM, (3/2)*PPCM, (3/2)*PPCM))
+              currently_typed += 'f';         
+          }
+          else if(drawGHI)
+          {
+            if(mouseClickWithin(width/2 - PPCM, height/2 - PPCM, (3/2)*PPCM, (3/2)*PPCM))
+              currently_typed += 'g';
+            else if(mouseClickWithin(width/2 + (1/2)*PPCM, height/2 - PPCM, (3/2)*PPCM, (3/2)*PPCM))
+              currently_typed += 'h';
+            else if(mouseClickWithin(width/2 - PPCM, height/2 + (1/2)*PPCM, (3/2)*PPCM, (3/2)*PPCM))
+              currently_typed += 'i';         
+          }
+          else if(drawJKL)
+          {
+            if(mouseClickWithin(width/2 - PPCM, height/2 - PPCM, (3/2)*PPCM, (3/2)*PPCM))
+              currently_typed += 'j';
+            else if(mouseClickWithin(width/2 + (1/2)*PPCM, height/2 - PPCM, (3/2)*PPCM, (3/2)*PPCM))
+              currently_typed += 'k';
+            else if(mouseClickWithin(width/2 - PPCM, height/2 + (1/2)*PPCM, (3/2)*PPCM, (3/2)*PPCM))
+              currently_typed += 'l';         
+          }
+          else if(drawMNO)
+          {
+            if(mouseClickWithin(width/2 - PPCM, height/2 - PPCM, (3/2)*PPCM, (3/2)*PPCM))
+              currently_typed += 'm';
+            else if(mouseClickWithin(width/2 + (1/2)*PPCM, height/2 - PPCM, (3/2)*PPCM, (3/2)*PPCM))
+              currently_typed += 'n';
+            else if(mouseClickWithin(width/2 - PPCM, height/2 + (1/2)*PPCM, (3/2)*PPCM, (3/2)*PPCM))
+              currently_typed += 'o';         
+          }
+          else if(drawPQRS)
+          {
+            if(mouseClickWithin(width/2 - PPCM, height/2 - PPCM, (3/2)*PPCM, (3/2)*PPCM))
+              currently_typed += 'p';
+            else if(mouseClickWithin(width/2 + (1/2)*PPCM, height/2 - PPCM, (3/2)*PPCM, (3/2)*PPCM))
+              currently_typed += 'q';
+            else if(mouseClickWithin(width/2 - PPCM, height/2 + (1/2)*PPCM, (3/2)*PPCM, (3/2)*PPCM))
+              currently_typed += 'r';
+            else if(mouseClickWithin(width/2 + (1/2)*PPCM, height/2 + (1/2)*PPCM, (3/2)*PPCM, (3/2)*PPCM))
+              currently_typed += 's'; 
+          }
+          else if(drawTUV)
+          {
+            if(mouseClickWithin(width/2 - PPCM, height/2 - PPCM, (3/2)*PPCM, (3/2)*PPCM))
+              currently_typed += 't';
+            else if(mouseClickWithin(width/2 + (1/2)*PPCM, height/2 - PPCM, (3/2)*PPCM, (3/2)*PPCM))
+              currently_typed += 'u';
+            else if(mouseClickWithin(width/2 - PPCM, height/2 + (1/2)*PPCM, (3/2)*PPCM, (3/2)*PPCM))
+              currently_typed += 'v';         
+          }
+          else if(drawWXYZ)
+          {
+            if(mouseClickWithin(width/2 - PPCM, height/2 - PPCM, (3/2)*PPCM, (3/2)*PPCM))
+              currently_typed += 'w';
+            else if(mouseClickWithin(width/2 + (1/2)*PPCM, height/2 - PPCM, (3/2)*PPCM, (3/2)*PPCM))
+              currently_typed += 'x';
+            else if(mouseClickWithin(width/2 - PPCM, height/2 + (1/2)*PPCM, (3/2)*PPCM, (3/2)*PPCM))
+              currently_typed += 'y';
+            else if(mouseClickWithin(width/2 + (1/2)*PPCM, height/2 + (1/2)*PPCM, (3/2)*PPCM, (3/2)*PPCM))
+              currently_typed += 'z';           
+          }
+
+          draw_Options = false;
+          drawSymbs = false;
+          drawABC = false;
+          drawDEF = false;
+          drawGHI = false;
+          drawJKL = false;
+          drawMNO = false;
+          drawPQRS = false;
+          drawTUV = false;
+          drawWXYZ = false;
+        }
       }
     }
     
@@ -295,4 +540,4 @@ function windowResized()
   // Starts drawing the watch immediately after we go fullscreen (DO NO CHANGE THIS!)
   draw_finger_arm = true;
   attempt_start_time = millis();
-}
+} 
