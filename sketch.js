@@ -54,6 +54,14 @@ let leftArrow, rightArrow;     // holds the left and right UI images for our bas
 let ARROW_SIZE;                // UI button size
 let current_letter = 'a';      // current char being displayed on our basic 2D keyboard (starts with 'a')
 
+//common words and spell-errors
+let common = [];
+let spell_errors = [];
+
+//currently typed word
+let current_word = "";
+let suggestion = "";
+
 // Runs once before the setup() and loads our data (images, phrases)
 function preload()
 {    
@@ -67,6 +75,10 @@ function preload()
   // Loads UI elements for our basic keyboard
   leftArrow = loadImage("data/left.png");
   rightArrow = loadImage("data/right.png");
+  
+  // Loads common words and spell-errors
+  common = loadStrings("data/count_1w.txt");
+  spell_errors = loadStrings("data/spell-errors.txt");
 }
 
 // Runs once at the start
@@ -80,6 +92,11 @@ function setup()
   target_phrase = phrases[current_trial];
   
   drawUserIDScreen();       // draws the user input screen (student number and display size)
+  
+  for (let i = 0; i < common.length; i++){
+    let word = common[i];
+    common[i] = word.split("	")[0];
+  }
 }
 
 function draw()
@@ -91,7 +108,7 @@ function draw()
     
     drawArmAndWatch();         // draws arm and watch background
     writeTargetAndEntered();   // writes the target and entered phrases above the watch
-    drawACCEPT();             // draws the 'ACCEPT' button that submits a phrase and completes a trial
+    drawACCEPT();              // draws the 'ACCEPT' button that submits a phrase and completes a trial
     
     // Draws the non-interactive screen area (4x1cm) -- DO NOT CHANGE SIZE!
     noStroke();
@@ -100,7 +117,11 @@ function draw()
     textAlign(CENTER); 
     textFont("Arial", 16);
     fill(0);
-    text("NOT INTERACTIVE", width/2, height/2 - 1.3 * PPCM);
+    
+    //finds suggestion for current word
+    current_word = currently_typed.split(" ")[currently_typed.split(" ").length-1];
+    suggestion = auto_complete(current_word)
+    text(suggestion, width/2, height/2 - 1.3 * PPCM);
 
     // Draws the touch input area (4x3cm) -- DO NOT CHANGE SIZE!
     stroke(0, 255, 0);
@@ -132,7 +153,7 @@ function draw_letters()
   textFont("Arial", 15);
   fill(0);
   
-  text("← ' ⎵", width/2 - (4/3)*PPCM, height/2 - (PPCM/2) + 5);
+  text("← ✓ ⎵", width/2 - (4/3)*PPCM, height/2 - (PPCM/2) + 5);
   
   text("a b c", width/2, height/2 - (PPCM/2) + 5);
   
@@ -190,7 +211,7 @@ function drawOptions()
   if(drawSymbs)
   {
     text("←", width/2 - (1/4)*PPCM, height/2 - (PPCM/4) + 7);
-    text("'", width/2 + (5/4)*PPCM, height/2 - (PPCM/4) + 7);
+    text("✓", width/2 + (5/4)*PPCM, height/2 - (PPCM/4) + 7);
     text("⎵", width/2 - (1/4)*PPCM, height/2 + ((5*PPCM)/4) + 7);
   }
   else if(drawABC)
@@ -297,8 +318,11 @@ function mousePressed()
           {
             if(mouseClickWithin(width/2 - PPCM, height/2 - PPCM, (3/2)*PPCM, (3/2)*PPCM))
               currently_typed = currently_typed.substring(0, currently_typed.length - 1);
-            else if(mouseClickWithin(width/2 + (1/2)*PPCM, height/2 - PPCM, (3/2)*PPCM, (3/2)*PPCM))
-              currently_typed += "'";
+            else if(mouseClickWithin(width/2 + (1/2)*PPCM, height/2 - PPCM, (3/2)*PPCM, (3/2)*PPCM)){
+              let current_arr = currently_typed.split(' ');
+              current_arr[current_arr.length-1] = suggestion;
+              currently_typed = current_arr.join(' ')+" "; 
+            }
             else if(mouseClickWithin(width/2 - PPCM, height/2 + (1/2)*PPCM, (3/2)*PPCM, (3/2)*PPCM))
               currently_typed += ' ';        
           }
@@ -378,17 +402,17 @@ function mousePressed()
             else if(mouseClickWithin(width/2 + (1/2)*PPCM, height/2 + (1/2)*PPCM, (3/2)*PPCM, (3/2)*PPCM))
               currently_typed += 'z';           
           }
-
-          draw_Options = false;
-          drawSymbs = false;
-          drawABC = false;
-          drawDEF = false;
-          drawGHI = false;
-          drawJKL = false;
-          drawMNO = false;
-          drawPQRS = false;
-          drawTUV = false;
-          drawWXYZ = false;
+          
+            draw_Options = false;
+            drawSymbs = false;
+            drawABC = false;
+            drawDEF = false;
+            drawGHI = false;
+            drawJKL = false;
+            drawMNO = false;
+            drawPQRS = false;
+            drawTUV = false;
+            drawWXYZ = false;
         }
       }
     }
@@ -432,6 +456,17 @@ function mousePressed()
       }
     }
   }
+}
+
+function auto_complete(word){
+  let len = word.length;
+  for (let i = 0; i < common.length; i++){
+    let suggestion = common[i];
+    if (word === suggestion.substring(0,len)){
+      return suggestion;
+    }
+  }
+  return common[0];
 }
 
 // Resets variables for second attempt
@@ -540,4 +575,4 @@ function windowResized()
   // Starts drawing the watch immediately after we go fullscreen (DO NO CHANGE THIS!)
   draw_finger_arm = true;
   attempt_start_time = millis();
-} 
+}
