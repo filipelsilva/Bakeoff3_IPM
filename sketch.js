@@ -348,11 +348,18 @@ function mousePressed()
         {
           if(drawSymbs)
           {
-            if(mouseClickWithin(width/2 - PPCM, height/2 - PPCM, (3/2)*PPCM, (3/2)*PPCM))
+            if(mouseClickWithin(width/2 + (1/2)*PPCM, height/2 + (1/2)*PPCM, (3/2)*PPCM, (3/2)*PPCM))
               currently_typed = currently_typed.substring(0, currently_typed.length - 1);
-            else if(mouseClickWithin(width/2 + (1/2)*PPCM, height/2 - PPCM, (3/2)*PPCM, (3/2)*PPCM)){
+            else if(mouseClickWithin(width/2 - 2.0*PPCM, height/2 - 1.0*PPCM, 2*PPCM, 1.5*PPCM))
+            {
               let current_arr = currently_typed.split(' ');
               current_arr[current_arr.length-1] = suggestions[0];
+              currently_typed = current_arr.join(' ')+" "; 
+            }
+            else if(mouseClickWithin(width/2, height/2 - 1.0*PPCM, 2*PPCM, 1.5*PPCM))
+            {
+              let current_arr = currently_typed.split(' ');
+              current_arr[current_arr.length-1] = suggestions[1];
               currently_typed = current_arr.join(' ')+" "; 
             }
             else if(mouseClickWithin(width/2 - PPCM, height/2 + (1/2)*PPCM, (3/2)*PPCM, (3/2)*PPCM))
