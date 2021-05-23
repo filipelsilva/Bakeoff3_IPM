@@ -60,7 +60,7 @@ let spell_errors = [];
 
 //currently typed word
 let current_word = "";
-let suggestion = "";
+let suggestions = [];
 
 // Runs once before the setup() and loads our data (images, phrases)
 function preload()
@@ -115,13 +115,18 @@ function draw()
     fill(125);
     rect(width/2 - 2.0*PPCM, height/2 - 2.0*PPCM, 4.0*PPCM, 1.0*PPCM);
     textAlign(CENTER); 
-    textFont("Arial", 16);
+    textFont("Arial", 12);
     fill(0);
     
     //finds suggestion for current word
     current_word = currently_typed.split(" ")[currently_typed.split(" ").length-1];
-    suggestion = auto_complete(current_word)
-    text(suggestion, width/2, height/2 - 1.3 * PPCM);
+    suggestions = auto_complete(current_word);
+    text(suggestions[0], width/2 - 1 * PPCM, height/2 - 1.4 * PPCM);
+    stroke(255, 255, 255);
+    line(width/2, height/2 - 2*PPCM, width/2, height/2 - PPCM);
+    noStroke();
+    text(suggestions[1], width/2 + 1 * PPCM, height/2 - 1.4 * PPCM);
+    textFont("Arial", 16);
 
     // Draws the touch input area (4x3cm) -- DO NOT CHANGE SIZE!
     stroke(0, 255, 0);
@@ -153,7 +158,7 @@ function draw_letters()
   textFont("Arial", 15);
   fill(0);
   
-  text("← ✓ ⎵", width/2 - (4/3)*PPCM, height/2 - (PPCM/2) + 5);
+  text("← ↑ ⎵", width/2 - (4/3)*PPCM, height/2 - (PPCM/2) + 5);
   
   text("a b c", width/2, height/2 - (PPCM/2) + 5);
   
@@ -195,57 +200,80 @@ function draw2Dkeyboard()
   image(rightArrow, width/2, height/2, ARROW_SIZE, ARROW_SIZE);  
 }
 
+function drawKeyGrid(){
+    line(width/2 - PPCM, height/2- PPCM, width/2 - PPCM, height/2 + 2*PPCM);
+    line(width/2 + PPCM/2, height/2- PPCM, width/2 + PPCM/2, height/2 + 2*PPCM); 
+    line(width/2 - 2*PPCM, height/2 + PPCM/2, width/2 + 2*PPCM, height/2 + PPCM/2);
+}
+
+function drawSymbolsGrid(){
+    line(width/2 , height/2 - PPCM, width/2, height/2 + 0.5*PPCM);
+    line(width/2 - PPCM, height/2 + 0.5*PPCM, width/2 - PPCM, height/2 + 2*PPCM);
+    line(width/2 + PPCM/2, height/2 + 0.5*PPCM, width/2 + PPCM/2, height/2 + 2*PPCM);
+    line(width/2 - 2*PPCM, height/2 + PPCM/2, width/2 + 2*PPCM, height/2 + PPCM/2);
+}
+
 function drawOptions()
 {
-  line(width/2 - PPCM, height/2- PPCM, width/2 - PPCM, height/2 + 2*PPCM);
-  line(width/2 + PPCM/2, height/2- PPCM, width/2 + PPCM/2, height/2 + 2*PPCM); 
-  
-  line(width/2 - 2*PPCM, height/2 + PPCM/2, width/2 + 2*PPCM, height/2 + PPCM/2);
   
   textAlign(CENTER);
   textFont("Arial", 25);
   fill(0);
   
-  text("X", width/2 - (3*PPCM)/2, height/2 - PPCM/4 + 8.5);
   
   if(drawSymbs)
   {
-    text("←", width/2 - (1/4)*PPCM, height/2 - (PPCM/4) + 7);
-    text("✓", width/2 + (5/4)*PPCM, height/2 - (PPCM/4) + 7);
-    text("⎵", width/2 - (1/4)*PPCM, height/2 + ((5*PPCM)/4) + 7);
+    drawSymbolsGrid();
+    //text("✓", width/2 + (5/4)*PPCM, height/2 - (PPCM/4) + 7);
+    text("X", width/2 - (3*PPCM)/2, height/2 + 1.5*PPCM);
+    text("↑", width/2 - 1 * PPCM, height/2 - (PPCM/4) + 7);
+    text("↑", width/2 + 1 * PPCM, height/2 - (PPCM/4) + 7);
+    text("←", width/2 + (5/4)*PPCM, height/2 + ((5*PPCM)/4) + 8.5);
+    text("⎵", width/2 - (1/4)*PPCM, height/2 + (5*PPCM)/4);
   }
   else if(drawABC)
   {
+    drawKeyGrid();
+    text("X", width/2 - (3*PPCM)/2, height/2 - PPCM/4 + 8.5);
     text("a", width/2 - (1/4)*PPCM, height/2 - (PPCM/4) + 8.5);
     text("b", width/2 + (5/4)*PPCM, height/2 - (PPCM/4) + 8.5);
     text("c", width/2 - (1/4)*PPCM, height/2 + ((5*PPCM)/4) + 8.5);      
   }
   else if(drawDEF)
   {
+    drawKeyGrid();
+    text("X", width/2 - (3*PPCM)/2, height/2 - PPCM/4 + 8.5);
     text("d", width/2 - (1/4)*PPCM, height/2 - (PPCM/4) + 8.5);
     text("e", width/2 + (5/4)*PPCM, height/2 - (PPCM/4) + 8.5);
     text("f", width/2 - (1/4)*PPCM, height/2 + ((5*PPCM)/4) + 8.5);    
   }
   else if(drawGHI)
   {
+    drawKeyGrid();
+    text("X", width/2 - (3*PPCM)/2, height/2 - PPCM/4 + 8.5);
     text("g", width/2 - (1/4)*PPCM, height/2 - (PPCM/4) + 8.5);
     text("h", width/2 + (5/4)*PPCM, height/2 - (PPCM/4) + 8.5);
     text("i", width/2 - (1/4)*PPCM, height/2 + ((5*PPCM)/4) + 8.5);    
   }
   else if(drawJKL)
   {
+    drawKeyGrid();
     text("j", width/2 - (1/4)*PPCM, height/2 - (PPCM/4) + 8.5);
     text("k", width/2 + (5/4)*PPCM, height/2 - (PPCM/4) + 8.5);
     text("l", width/2 - (1/4)*PPCM, height/2 + ((5*PPCM)/4) + 8.5);    
   }
   else if(drawMNO)
   {
+    drawKeyGrid();
+    text("X", width/2 - (3*PPCM)/2, height/2 - PPCM/4 + 8.5);
     text("m", width/2 - (1/4)*PPCM, height/2 - (PPCM/4) + 8.5);
     text("n", width/2 + (5/4)*PPCM, height/2 - (PPCM/4) + 8.5);
     text("o", width/2 - (1/4)*PPCM, height/2 + ((5*PPCM)/4) + 8.5);    
   }
   else if(drawPQRS)
   {
+    drawKeyGrid();
+    text("X", width/2 - (3*PPCM)/2, height/2 - PPCM/4 + 8.5);
     text("p", width/2 - (1/4)*PPCM, height/2 - (PPCM/4) + 8.5);
     text("q", width/2 + (5/4)*PPCM, height/2 - (PPCM/4) + 8.5);
     text("r", width/2 - (1/4)*PPCM, height/2 + ((5*PPCM)/4) + 8.5); 
@@ -253,12 +281,16 @@ function drawOptions()
   }
   else if(drawTUV)
   {
+    drawKeyGrid();
+    text("X", width/2 - (3*PPCM)/2, height/2 - PPCM/4 + 8.5);
     text("t", width/2 - (1/4)*PPCM, height/2 - (PPCM/4) + 8.5);
     text("u", width/2 + (5/4)*PPCM, height/2 - (PPCM/4) + 8.5);
     text("v", width/2 - (1/4)*PPCM, height/2 + ((5*PPCM)/4) + 8.5);    
   }
   else if(drawWXYZ)
   {
+    drawKeyGrid();
+    text("X", width/2 - (3*PPCM)/2, height/2 - PPCM/4 + 8.5);
     text("w", width/2 - (1/4)*PPCM, height/2 - (PPCM/4) + 8.5);
     text("x", width/2 + (5/4)*PPCM, height/2 - (PPCM/4) + 8.5);
     text("y", width/2 - (1/4)*PPCM, height/2 + ((5*PPCM)/4) + 8.5); 
@@ -320,7 +352,7 @@ function mousePressed()
               currently_typed = currently_typed.substring(0, currently_typed.length - 1);
             else if(mouseClickWithin(width/2 + (1/2)*PPCM, height/2 - PPCM, (3/2)*PPCM, (3/2)*PPCM)){
               let current_arr = currently_typed.split(' ');
-              current_arr[current_arr.length-1] = suggestion;
+              current_arr[current_arr.length-1] = suggestions[0];
               currently_typed = current_arr.join(' ')+" "; 
             }
             else if(mouseClickWithin(width/2 - PPCM, height/2 + (1/2)*PPCM, (3/2)*PPCM, (3/2)*PPCM))
@@ -459,14 +491,28 @@ function mousePressed()
 }
 
 function auto_complete(word){
+  //length 11 no max
   let len = word.length;
+  let suggestion_1, suggestion_2;
+  let last_i = 1;
   for (let i = 0; i < common.length; i++){
     let suggestion = common[i];
-    if (word === suggestion.substring(0,len)){
-      return suggestion;
+    if (word === suggestion.substring(0,len) && word !== suggestion && suggestion.length < 12){
+      suggestion_1 = suggestion;
+      last_i = i+1;
+      break;
     }
   }
-  return common[0];
+  
+  for (let i = last_i; i < common.length; i++){
+    let suggestion = common[i];
+    if (word === suggestion.substring(0,len) && word !== suggestion && suggestion.length < 12){
+      suggestion_2 = suggestion;
+      return [suggestion_1, suggestion_2];
+    }
+  }
+  
+  return [common[0],common[1]];
 }
 
 // Resets variables for second attempt
@@ -502,6 +548,7 @@ function printAndSavePerformance()
   let penalty          = max(0, (errors - freebie_errors) / attempt_duration); 
   let wpm_w_penalty    = max((wpm - penalty),0);                                   // minus because higher WPM is better: NET WPM
   let timestamp        = day() + "/" + month() + "/" + year() + "  " + hour() + ":" + minute() + ":" + second();
+  CPS = letters_entered / attempt_duration / 60;
   
   background(color(0,0,0));    // clears screen
   cursor();                    // shows the cursor again
@@ -524,6 +571,7 @@ function printAndSavePerformance()
   text("Freebie errors: " + freebie_errors.toFixed(2), width / 2, height / 2 + h+40);
   text("Penalty: " + penalty.toFixed(2), width / 2, height / 2 + h+60);
   text("WPM with penalty: " + wpm_w_penalty.toFixed(2), width / 2, height / 2 + h+80);
+  text("CPS: " + CPS.toFixed(2), width / 2, height / 2 + h+100);
 
   // Saves results (DO NOT CHANGE!)
   let attempt_data = 
