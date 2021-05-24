@@ -58,8 +58,9 @@ let current_letter = 'a';      // current char being displayed on our basic 2D k
 let common = [];
 let spell_errors = [];
 
-//currently typed word
+//currently and past typed word
 let current_word = "";
+let past_word = "";
 let suggestions = [];
 
 // Runs once before the setup() and loads our data (images, phrases)
@@ -78,6 +79,7 @@ function preload()
   
   // Loads common words and spell-errors
   common = loadStrings("data/count_1w.txt");
+  common2w = loadStrings("data/count_2w.txt");
   spell_errors = loadStrings("data/spell-errors.txt");
 }
 
@@ -96,6 +98,11 @@ function setup()
   for (let i = 0; i < common.length; i++){
     let word = common[i];
     common[i] = word.split("	")[0];
+  }
+
+  for (let i = 0; i < common2w.length; i++){
+    let word = common2w[i];
+    common2w[i] = [word.split("	")[0], word.split(" ")[1]];
   }
 }
 
@@ -120,7 +127,8 @@ function draw()
     
     //finds suggestion for current word
     current_word = currently_typed.split(" ")[currently_typed.split(" ").length-1];
-    suggestions = auto_complete(current_word);
+    past_word = currently_typed.split(" ")[currently_typed.split(" ").length-2];
+    suggestions = auto_complete(past_word, current_word);
     text(suggestions[0], width/2 - 1 * PPCM, height/2 - 1.4 * PPCM);
     stroke(255, 255, 255);
     line(width/2, height/2 - 2*PPCM, width/2, height/2 - PPCM);
@@ -497,7 +505,14 @@ function mousePressed()
   }
 }
 
-function auto_complete(word){
+function auto_complete(past_word, current_word){
+  if (!past_word)
+    return auto_complete1w(current_word);
+  else
+    return auto_complete2w(past_word, current_word);
+}
+
+function auto_complete1w(word){
   //length 11 no max
   let len = word.length;
   let suggestion_1, suggestion_2;
@@ -514,6 +529,31 @@ function auto_complete(word){
   for (let i = last_i; i < common.length; i++){
     let suggestion = common[i];
     if (word === suggestion.substring(0,len) && word !== suggestion && suggestion.length < 12){
+      suggestion_2 = suggestion;
+      return [suggestion_1, suggestion_2];
+    }
+  }
+  
+  return [common[0],common[1]];
+}
+
+function auto_complete2w(past_word, current_word){
+  //length 11 no max
+  let len = current_word.length;
+  let suggestion_1, suggestion_2;
+  let last_i = 1;
+  for (let i = 0; i < common2w.length; i++){
+    let suggestion = common2w[i][1];
+    if (past_word === common2w[i][0] && current_word === suggestion.substring(0,len) && current_word !== suggestion && suggestion.length < 12){
+      suggestion_1 = suggestion;
+      last_i = i+1;
+      break;
+    }
+  }
+  
+  for (let i = last_i; i < common2w.length; i++){
+    let suggestion = common2w[i][1];
+    if (past_word === common2w[i][0] && current_word === suggestion.substring(0,len) && current_word !== suggestion && suggestion.length < 12){
       suggestion_2 = suggestion;
       return [suggestion_1, suggestion_2];
     }
