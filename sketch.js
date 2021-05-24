@@ -93,7 +93,7 @@ function setup()
   shuffle(phrases, true);   // randomize the order of the phrases list (N=501)
   target_phrase = phrases[current_trial];
   
-  drawUserIDScreen();       // draws the user input screen (student number and display size)
+  drawUserIDScreen();       // draws the user input screen (student number and display sie)
   
   for (let i = 0; i < common.length; i++){
     let word = common[i];
@@ -102,7 +102,7 @@ function setup()
 
   for (let i = 0; i < common2w.length; i++){
     let word = common2w[i];
-    common2w[i] = [word.split("	")[0], word.split(" ")[1]];
+    common2w[i] = [word.split(" ")[0], word.split(" ")[1]];
   }
 }
 
@@ -128,7 +128,7 @@ function draw()
     //finds suggestion for current word
     current_word = currently_typed.split(" ")[currently_typed.split(" ").length-1];
     past_word = currently_typed.split(" ")[currently_typed.split(" ").length-2];
-    suggestions = auto_complete(past_word, current_word);
+    suggestions = auto_complete(currently_typed.split(" ").length, past_word, current_word);
     text(suggestions[0], width/2 - 1 * PPCM, height/2 - 1.4 * PPCM);
     stroke(255, 255, 255);
     line(width/2, height/2 - 2*PPCM, width/2, height/2 - PPCM);
@@ -505,8 +505,8 @@ function mousePressed()
   }
 }
 
-function auto_complete(past_word, current_word){
-  if (!past_word)
+function auto_complete(len, past_word, current_word){
+  if (len <= 1)
     return auto_complete1w(current_word);
   else
     return auto_complete2w(past_word, current_word);
@@ -543,23 +543,27 @@ function auto_complete2w(past_word, current_word){
   let suggestion_1, suggestion_2;
   let last_i = 1;
   for (let i = 0; i < common2w.length; i++){
-    let suggestion = common2w[i][1];
-    if (past_word === common2w[i][0] && current_word === suggestion.substring(0,len) && current_word !== suggestion && suggestion.length < 12){
-      suggestion_1 = suggestion;
-      last_i = i+1;
-      break;
+    if (past_word == common2w[i][0]){
+      let suggestion = common2w[i][1];
+      if (current_word === suggestion.substring(0,len) && current_word !== suggestion && suggestion.length < 12){
+        suggestion_1 = suggestion;
+        last_i = i+1;
+        break;
+      }
     }
   }
   
   for (let i = last_i; i < common2w.length; i++){
-    let suggestion = common2w[i][1];
-    if (past_word === common2w[i][0] && current_word === suggestion.substring(0,len) && current_word !== suggestion && suggestion.length < 12){
-      suggestion_2 = suggestion;
-      return [suggestion_1, suggestion_2];
+    if (past_word == common2w[i][0]){
+      let suggestion = common2w[i][1];
+      if (current_word === suggestion.substring(0,len) && current_word !== suggestion && suggestion.length < 12){
+        suggestion_2 = suggestion;
+        return [suggestion_1, suggestion_2];
+      }
     }
   }
   
-  return [common[0],common[1]];
+  return auto_complete1w(current_word);
 }
 
 // Resets variables for second attempt
