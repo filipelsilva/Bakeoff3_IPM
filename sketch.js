@@ -266,6 +266,7 @@ function drawOptions()
   else if(drawJKL)
   {
     drawKeyGrid();
+    text("X", width/2 - (3*PPCM)/2, height/2 - PPCM/4 + 8.5);
     text("j", width/2 - (1/4)*PPCM, height/2 - (PPCM/4) + 8.5);
     text("k", width/2 + (5/4)*PPCM, height/2 - (PPCM/4) + 8.5);
     text("l", width/2 - (1/4)*PPCM, height/2 + ((5*PPCM)/4) + 8.5);    
