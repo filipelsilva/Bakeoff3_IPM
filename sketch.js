@@ -93,7 +93,7 @@ function setup()
   shuffle(phrases, true);   // randomize the order of the phrases list (N=501)
   target_phrase = phrases[current_trial];
   
-  drawUserIDScreen();       // draws the user input screen (student number and display sie)
+  drawUserIDScreen();       // draws the user input screen (student number and display siz)
   
   for (let i = 0; i < common.length; i++){
     let word = common[i];
@@ -513,7 +513,6 @@ function auto_complete(len, past_word, current_word){
 }
 
 function auto_complete1w(word){
-  //length 11 no max
   let len = word.length;
   let suggestion_1, suggestion_2;
   let last_i = 1;
@@ -538,14 +537,13 @@ function auto_complete1w(word){
 }
 
 function auto_complete2w(past_word, current_word){
-  //length 11 no max
   let len = current_word.length;
   let suggestion_1, suggestion_2;
   let last_i = 1;
   for (let i = 0; i < common2w.length; i++){
     if (past_word == common2w[i][0]){
       let suggestion = common2w[i][1];
-      if (current_word === suggestion.substring(0,len) && current_word !== suggestion && suggestion.length < 12){
+      if (current_word === suggestion.substring(0,len) && current_word !== suggestion && suggestion.length < 14){
         suggestion_1 = suggestion;
         last_i = i+1;
         break;
@@ -556,7 +554,7 @@ function auto_complete2w(past_word, current_word){
   for (let i = last_i; i < common2w.length; i++){
     if (past_word == common2w[i][0]){
       let suggestion = common2w[i][1];
-      if (current_word === suggestion.substring(0,len) && current_word !== suggestion && suggestion.length < 12){
+      if (current_word === suggestion.substring(0,len) && current_word !== suggestion && suggestion.length < 14){
         suggestion_2 = suggestion;
         return [suggestion_1, suggestion_2];
       }
