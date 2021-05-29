@@ -97,7 +97,7 @@ function setup()
   
   for (let i = 0; i < common.length; i++){
     let word = common[i];
-    common[i] = word.split("	")[0];
+    common[i] = word.trim();
   }
 
   for (let i = 0; i < common2w.length; i++){
@@ -168,7 +168,16 @@ function draw_letters()
   textFont("Arial", 15);
   fill(0);
   
-  text("← ↑ ⎵", width/2 - (4/3)*PPCM, height/2 - (PPCM/2) + 5);
+  fill(0, 255, 0);
+  stroke(0, 255, 0);
+  text("↑", width/2 - (1.55)*PPCM, height/2 - 1.2*(PPCM/2));
+  fill(255, 132, 0);
+  stroke(255, 132, 0);
+  text("↑", width/2 - (1.1)*PPCM, height/2 - 1.2*(PPCM/2));
+  fill(0);
+  stroke(0, 0, 0);
+  text("⎵", width/2 - (1.55)*PPCM, height/2 - 0.6*(PPCM/2));
+  text("←", width/2 - (1.1)*PPCM, height/2 - 0.3*(PPCM/2));
   
   text("a b c", width/2, height/2 - (PPCM/2) + 5);
   
@@ -516,9 +525,9 @@ function mousePressed()
 
 function auto_complete(len, past_word, current_word){
   if (len <= 1)
-    return auto_complete1w(current_word);
+    return auto_complete1w(current_word.trim());
   else
-    return auto_complete2w(past_word, current_word);
+    return auto_complete2w(past_word.trim(), current_word.trim());
 }
 
 function auto_complete1w(word){
@@ -527,7 +536,7 @@ function auto_complete1w(word){
   let last_i = 1;
   for (let i = 0; i < common.length; i++){
     let suggestion = common[i];
-    if (word === suggestion.substring(0,len) && word !== suggestion && suggestion.length < 12){
+    if (word === suggestion.substring(0,len) && word !== suggestion && suggestion.length < 14){
       suggestion_1 = suggestion;
       last_i = i+1;
       break;
@@ -536,7 +545,7 @@ function auto_complete1w(word){
   
   for (let i = last_i; i < common.length; i++){
     let suggestion = common[i];
-    if (word === suggestion.substring(0,len) && word !== suggestion && suggestion.length < 12){
+    if (word === suggestion.substring(0,len) && word !== suggestion && suggestion.length < 14){
       suggestion_2 = suggestion;
       return [suggestion_1, suggestion_2];
     }
