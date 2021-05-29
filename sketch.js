@@ -93,7 +93,7 @@ function setup()
   shuffle(phrases, true);   // randomize the order of the phrases list (N=501)
   target_phrase = phrases[current_trial];
   
-  drawUserIDScreen();       // draws the user input screen (student number and display siz)
+  drawUserIDScreen();       // draws the user input screen (student number and display si)
   
   for (let i = 0; i < common.length; i++){
     let word = common[i];
@@ -129,15 +129,17 @@ function draw()
     current_word = currently_typed.split(" ")[currently_typed.split(" ").length-1];
     past_word = currently_typed.split(" ")[currently_typed.split(" ").length-2];
     suggestions = auto_complete(currently_typed.split(" ").length, past_word, current_word);
-    text(suggestions[0], width/2 - 1 * PPCM, height/2 - 1.4 * PPCM);
+    fill(0, 255, 0);
+    text(suggestions[0], width/2 - 2.0*PPCM, height/2 - 1.7*PPCM, 2*PPCM, 1*PPCM);
     stroke(255, 255, 255);
     line(width/2, height/2 - 2*PPCM, width/2, height/2 - PPCM);
     noStroke();
-    text(suggestions[1], width/2 + 1 * PPCM, height/2 - 1.4 * PPCM);
+    fill(255, 132, 0);
+    text(suggestions[1], width/2 + 0*PPCM, height/2 - 1.7*PPCM, 2*PPCM, 1*PPCM);
     textFont("Arial", 16);
 
     // Draws the touch input area (4x3cm) -- DO NOT CHANGE SIZE!
-    stroke(0, 255, 0);
+    stroke(0, 0, 0);
     noFill();
     rect(width/2 - 2.0*PPCM, height/2 - 1.0*PPCM, 4.0*PPCM, 3.0*PPCM);
 
@@ -234,8 +236,14 @@ function drawOptions()
     drawSymbolsGrid();
     //text("✓", width/2 + (5/4)*PPCM, height/2 - (PPCM/4) + 7);
     text("X", width/2 - (3*PPCM)/2, height/2 + 1.5*PPCM);
+    fill(0, 255, 0);
+    stroke(0, 255, 0);
     text("↑", width/2 - 1 * PPCM, height/2 - (PPCM/4) + 7);
+    fill(255, 132, 0);
+    stroke(255, 132, 0);
     text("↑", width/2 + 1 * PPCM, height/2 - (PPCM/4) + 7);
+    fill(0);
+    stroke(0, 0, 0);
     text("←", width/2 + (5/4)*PPCM, height/2 + ((5*PPCM)/4) + 8.5);
     text("⎵", width/2 - (1/4)*PPCM, height/2 + (5*PPCM)/4);
   }
