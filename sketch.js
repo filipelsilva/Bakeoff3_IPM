@@ -93,7 +93,7 @@ function setup()
   shuffle(phrases, true);   // randomize the order of the phrases list (N=501)
   target_phrase = phrases[current_trial];
   
-  drawUserIDScreen();       // draws the user input screen (student number and display si)
+  drawUserIDScreen();       // draws the user input screen (student number and display siz)
   
   for (let i = 0; i < common.length; i++){
     let word = common[i];
@@ -130,12 +130,17 @@ function draw()
     past_word = currently_typed.split(" ")[currently_typed.split(" ").length-2];
     suggestions = auto_complete(currently_typed.split(" ").length, past_word, current_word);
     fill(0, 255, 0);
-    text(suggestions[0], width/2 - 2.0*PPCM, height/2 - 1.7*PPCM, 2*PPCM, 1*PPCM);
+    text(suggestions[0], width/2 - 2.0*PPCM, height/2 - 1.9*PPCM, 2*PPCM, 0.5*PPCM);
+    fill(255, 132, 0);
+    text(suggestions[1], width/2 + 0*PPCM, height/2 - 1.9*PPCM, 2*PPCM, 0.5*PPCM);
+    fill(5, 44, 173);
+    text(suggestions[2], width/2 - 2.0*PPCM, height/2 - 1.4*PPCM, 2*PPCM, 0.5*PPCM);
+    fill(133, 23, 123);
+    text(suggestions[3], width/2 + 0*PPCM, height/2 - 1.4*PPCM, 2*PPCM, 0.5*PPCM);
     stroke(255, 255, 255);
     line(width/2, height/2 - 2*PPCM, width/2, height/2 - PPCM);
+    line(width/2 - 2.0*PPCM, height/2 - 1.5*PPCM, width/2 + 2.0*PPCM, height/2 - 1.5*PPCM);
     noStroke();
-    fill(255, 132, 0);
-    text(suggestions[1], width/2 + 0*PPCM, height/2 - 1.7*PPCM, 2*PPCM, 1*PPCM);
     textFont("Arial", 16);
 
     // Draws the touch input area (4x3cm) -- DO NOT CHANGE SIZE!
@@ -165,15 +170,22 @@ function draw2Dkeyboard_v2()
 function draw_letters()
 {
   textAlign(CENTER);
-  textFont("Arial", 15);
+  textFont("Arial", 20);
   fill(0);
   
   fill(0, 255, 0);
   stroke(0, 255, 0);
-  text("↑", width/2 - (1.55)*PPCM, height/2 - 1.2*(PPCM/2));
+  text("•", width/2 - (1.55)*PPCM, height/2 - 1.2*(PPCM/2) - 1);
   fill(255, 132, 0);
   stroke(255, 132, 0);
-  text("↑", width/2 - (1.1)*PPCM, height/2 - 1.2*(PPCM/2));
+  text("•", width/2 - (1.1)*PPCM, height/2 - 1.2*(PPCM/2) - 1 );
+  fill(5, 44, 173);
+  stroke(5, 44, 173);
+  text("•", width/2 - (1.55)*PPCM, height/2 - 1.2*(PPCM/2) + 9);
+  fill(133, 23, 123);
+  stroke(133, 23, 123);
+  text("•", width/2 - (1.1)*PPCM, height/2 - 1.2*(PPCM/2) + 9);
+  textFont("Arial", 15);
   fill(0);
   stroke(0, 0, 0);
   text("⎵", width/2 - (1.55)*PPCM, height/2 - 0.6*(PPCM/2));
@@ -226,10 +238,11 @@ function drawKeyGrid(){
 }
 
 function drawSymbolsGrid(){
-    line(width/2 , height/2 - PPCM, width/2, height/2 + 0.5*PPCM);
-    line(width/2 - PPCM, height/2 + 0.5*PPCM, width/2 - PPCM, height/2 + 2*PPCM);
-    line(width/2 + PPCM/2, height/2 + 0.5*PPCM, width/2 + PPCM/2, height/2 + 2*PPCM);
-    line(width/2 - 2*PPCM, height/2 + PPCM/2, width/2 + 2*PPCM, height/2 + PPCM/2);
+    line(width/2 , height/2 - PPCM, width/2, height/2 + PPCM);
+    line(width/2 - PPCM, height/2 + PPCM, width/2 - PPCM, height/2 + 2*PPCM);
+    line(width/2 + PPCM/2, height/2 + PPCM, width/2 + PPCM/2, height/2 + 2*PPCM);
+    line(width/2 - 2.0*PPCM, height/2 , width/2 + 2.0*PPCM, height/2);
+    line(width/2 - 2.0*PPCM, height/2 + PPCM , width/2 + 2.0*PPCM, height/2 + PPCM);
 }
 
 function drawOptions()
@@ -244,17 +257,25 @@ function drawOptions()
   {
     drawSymbolsGrid();
     //text("✓", width/2 + (5/4)*PPCM, height/2 - (PPCM/4) + 7);
-    text("X", width/2 - (3*PPCM)/2, height/2 + 1.5*PPCM);
+    text("X", width/2 - (3*PPCM)/2, height/2 + 1.5*PPCM + 10);
+    textFont("Arial", 50);
     fill(0, 255, 0);
     stroke(0, 255, 0);
-    text("↑", width/2 - 1 * PPCM, height/2 - (PPCM/4) + 7);
+    text("•", width/2 - 1 * PPCM, height/2 - (PPCM/2) + 18);
     fill(255, 132, 0);
-    stroke(255, 132, 0);
-    text("↑", width/2 + 1 * PPCM, height/2 - (PPCM/4) + 7);
+    stroke(255, 132, 0)
+    text("•", width/2 + 1 * PPCM, height/2 - (PPCM/2) + 18);
+    fill(5, 44, 173);
+    stroke(5, 44, 173);
+    text("•", width/2 - 1 * PPCM, height/2 + (PPCM/4) + 27);
+    fill(133, 23, 123);
+    stroke(133, 23, 123);
+    text("•", width/2 + 1 * PPCM, height/2 + (PPCM/4) + 27);
+    textFont("Arial", 20);
     fill(0);
     stroke(0, 0, 0);
-    text("←", width/2 + (5/4)*PPCM, height/2 + ((5*PPCM)/4) + 8.5);
-    text("⎵", width/2 - (1/4)*PPCM, height/2 + (5*PPCM)/4);
+    text("←", width/2 + (5/4)*PPCM, height/2 + ((5*PPCM)/4) + 14);
+    text("⎵", width/2 - (1/4)*PPCM, height/2 + (5*PPCM)/4 + 10);
   }
   else if(drawABC)
   {
@@ -374,21 +395,34 @@ function mousePressed()
         {
           if(drawSymbs)
           {
-            if(mouseClickWithin(width/2 + (1/2)*PPCM, height/2 + (1/2)*PPCM, (3/2)*PPCM, (3/2)*PPCM))
+            if(mouseClickWithin(width/2 + PPCM/2, height/2 + PPCM, (3/2)*PPCM, PPCM))
               currently_typed = currently_typed.substring(0, currently_typed.length - 1);
-            else if(mouseClickWithin(width/2 - 2.0*PPCM, height/2 - 1.0*PPCM, 2*PPCM, 1.5*PPCM))
+            
+            else if(mouseClickWithin(width/2 - 2*PPCM , height/2 - PPCM, 2*PPCM, PPCM))
             {
               let current_arr = currently_typed.split(' ');
               current_arr[current_arr.length-1] = suggestions[0];
               currently_typed = current_arr.join(' ')+" "; 
             }
-            else if(mouseClickWithin(width/2, height/2 - 1.0*PPCM, 2*PPCM, 1.5*PPCM))
+            else if(mouseClickWithin(width/2, height/2 - PPCM, 2*PPCM, PPCM))
             {
               let current_arr = currently_typed.split(' ');
               current_arr[current_arr.length-1] = suggestions[1];
               currently_typed = current_arr.join(' ')+" "; 
             }
-            else if(mouseClickWithin(width/2 - PPCM, height/2 + (1/2)*PPCM, (3/2)*PPCM, (3/2)*PPCM))
+            else if(mouseClickWithin(width/2 - 2*PPCM, height/2, 2*PPCM, PPCM))
+            {
+              let current_arr = currently_typed.split(' ');
+              current_arr[current_arr.length-1] = suggestions[2];
+              currently_typed = current_arr.join(' ')+" "; 
+            }
+            else if(mouseClickWithin(width/2, height/2 , 2*PPCM, PPCM))
+            {
+              let current_arr = currently_typed.split(' ');
+              current_arr[current_arr.length-1] = suggestions[3];
+              currently_typed = current_arr.join(' ')+" "; 
+            }
+            else if(mouseClickWithin(width/2 - PPCM, height/2 + PPCM, (3/2)*PPCM, PPCM))
               currently_typed += ' ';        
           }
           else if(drawABC)
@@ -525,61 +559,42 @@ function mousePressed()
 
 function auto_complete(len, past_word, current_word){
   if (len <= 1)
-    return auto_complete1w(current_word.trim());
+    return auto_complete1w(current_word.trim(), 0, ['','','','']);
   else
     return auto_complete2w(past_word.trim(), current_word.trim());
 }
 
-function auto_complete1w(word){
+function auto_complete1w(word, n_found, found_words){
+  let n = n_found;
   let len = word.length;
-  let suggestion_1, suggestion_2;
-  let last_i = 1;
-  for (let i = 0; i < common.length; i++){
+  let ret = found_words;
+  for (let i = 0; n < 4 && i < common.length; i++){
     let suggestion = common[i];
-    if (word === suggestion.substring(0,len) && word !== suggestion && suggestion.length < 14){
-      suggestion_1 = suggestion;
-      last_i = i+1;
-      break;
+    if (word === suggestion.substring(0,len) && word !== suggestion && !ret.includes(suggestion) && suggestion.length < 14){
+      ret[n] = suggestion;
+      n++;
     }
   }
   
-  for (let i = last_i; i < common.length; i++){
-    let suggestion = common[i];
-    if (word === suggestion.substring(0,len) && word !== suggestion && suggestion.length < 14){
-      suggestion_2 = suggestion;
-      return [suggestion_1, suggestion_2];
-    }
-  }
-  
-  return [common[0],common[1]];
+  return ret;
 }
 
 function auto_complete2w(past_word, current_word){
+  let n = 0;
   let len = current_word.length;
-  let suggestion_1, suggestion_2;
+  let ret = [];
   let last_i = 1;
-  for (let i = 0; i < common2w.length; i++){
+  for (let i = 0; n < 4 && i < common2w.length; i++){
     if (past_word == common2w[i][0]){
       let suggestion = common2w[i][1];
       if (current_word === suggestion.substring(0,len) && current_word !== suggestion && suggestion.length < 14){
-        suggestion_1 = suggestion;
-        last_i = i+1;
-        break;
+        ret[n] = suggestion;
+        n++;
       }
     }
   }
   
-  for (let i = last_i; i < common2w.length; i++){
-    if (past_word == common2w[i][0]){
-      let suggestion = common2w[i][1];
-      if (current_word === suggestion.substring(0,len) && current_word !== suggestion && suggestion.length < 14){
-        suggestion_2 = suggestion;
-        return [suggestion_1, suggestion_2];
-      }
-    }
-  }
-  
-  return auto_complete1w(current_word);
+  return auto_complete1w(current_word, ret.length, ret);
 }
 
 // Resets variables for second attempt
