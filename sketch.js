@@ -122,20 +122,16 @@ function draw()
     fill(125);
     rect(width/2 - 2.0*PPCM, height/2 - 2.0*PPCM, 4.0*PPCM, 1.0*PPCM);
     textAlign(CENTER); 
-    textFont("Arial", 12);
+    textFont("Arial", 11);
     fill(0);
     
     //finds suggestion for current word
     current_word = currently_typed.split(" ")[currently_typed.split(" ").length-1];
     past_word = currently_typed.split(" ")[currently_typed.split(" ").length-2];
     suggestions = auto_complete(currently_typed.split(" ").length, past_word, current_word);
-    fill(0, 255, 0);
     text(suggestions[0], width/2 - 2.0*PPCM, height/2 - 1.9*PPCM, 2*PPCM, 0.5*PPCM);
-    fill(255, 132, 0);
     text(suggestions[1], width/2 + 0*PPCM, height/2 - 1.9*PPCM, 2*PPCM, 0.5*PPCM);
-    fill(5, 44, 173);
     text(suggestions[2], width/2 - 2.0*PPCM, height/2 - 1.4*PPCM, 2*PPCM, 0.5*PPCM);
-    fill(133, 23, 123);
     text(suggestions[3], width/2 + 0*PPCM, height/2 - 1.4*PPCM, 2*PPCM, 0.5*PPCM);
     stroke(255, 255, 255);
     line(width/2, height/2 - 2*PPCM, width/2, height/2 - PPCM);
@@ -170,24 +166,10 @@ function draw2Dkeyboard_v2()
 function draw_letters()
 {
   textAlign(CENTER);
-  textFont("Arial", 20);
-  fill(0);
-  
-  fill(0, 255, 0);
-  stroke(0, 255, 0);
-  text("•", width/2 - (1.55)*PPCM, height/2 - 1.2*(PPCM/2) - 1);
-  fill(255, 132, 0);
-  stroke(255, 132, 0);
-  text("•", width/2 - (1.1)*PPCM, height/2 - 1.2*(PPCM/2) - 1 );
-  fill(5, 44, 173);
-  stroke(5, 44, 173);
-  text("•", width/2 - (1.55)*PPCM, height/2 - 1.2*(PPCM/2) + 9);
-  fill(133, 23, 123);
-  stroke(133, 23, 123);
-  text("•", width/2 - (1.1)*PPCM, height/2 - 1.2*(PPCM/2) + 9);
   textFont("Arial", 15);
   fill(0);
   stroke(0, 0, 0);
+  text("AUTO", width/2 - (1.35)*PPCM, height/2 - 1*(PPCM/2));
   text("⎵", width/2 - (1.55)*PPCM, height/2 - 0.6*(PPCM/2));
   text("←", width/2 - (1.1)*PPCM, height/2 - 0.3*(PPCM/2));
   
@@ -258,19 +240,18 @@ function drawOptions()
     drawSymbolsGrid();
     //text("✓", width/2 + (5/4)*PPCM, height/2 - (PPCM/4) + 7);
     text("X", width/2 - (3*PPCM)/2, height/2 + 1.5*PPCM + 10);
-    textFont("Arial", 50);
-    fill(0, 255, 0);
-    stroke(0, 255, 0);
-    text("•", width/2 - 1 * PPCM, height/2 - (PPCM/2) + 18);
-    fill(255, 132, 0);
-    stroke(255, 132, 0)
-    text("•", width/2 + 1 * PPCM, height/2 - (PPCM/2) + 18);
-    fill(5, 44, 173);
-    stroke(5, 44, 173);
-    text("•", width/2 - 1 * PPCM, height/2 + (PPCM/4) + 27);
-    fill(133, 23, 123);
-    stroke(133, 23, 123);
-    text("•", width/2 + 1 * PPCM, height/2 + (PPCM/4) + 27);
+    noStroke();
+    fill(125);
+    rect(width/2 - 2.0*PPCM, height/2 - 2.0*PPCM, 4.0*PPCM, 1.0*PPCM);
+    textAlign(CENTER); 
+    textFont("Arial", 14);
+    fill(0);
+    text("Choose a suggestion", width/2, height/2 - 1.3*PPCM);
+    textFont("Arial", 11);
+    text(suggestions[0], width/2 - 2 * PPCM, height/2 - 0.6*PPCM, 2*PPCM, 0.6*PPCM);
+    text(suggestions[1], width/2 - 0 * PPCM, height/2 - 0.6*PPCM, 2*PPCM, 0.6*PPCM);
+    text(suggestions[2], width/2 - 2 * PPCM, height/2 + 0.4*PPCM, 2*PPCM, 0.6*PPCM);
+    text(suggestions[3], width/2 - 0 * PPCM, height/2 + 0.4*PPCM, 2*PPCM, 0.6*PPCM);
     textFont("Arial", 20);
     fill(0);
     stroke(0, 0, 0);
@@ -345,6 +326,20 @@ function drawOptions()
   }
 }
 
+function closeSection()
+{
+    draw_Options = false;
+    drawSymbs = false;
+    drawABC = false;
+    drawDEF = false;
+    drawGHI = false;
+    drawJKL = false;
+    drawMNO = false;
+    drawPQRS = false;
+    drawTUV = false;
+    drawWXYZ = false;
+}
+
 // Evoked when the mouse button was pressed
 function mousePressed()
 {
@@ -402,28 +397,37 @@ function mousePressed()
             {
               let current_arr = currently_typed.split(' ');
               current_arr[current_arr.length-1] = suggestions[0];
-              currently_typed = current_arr.join(' ')+" "; 
+              currently_typed = current_arr.join(' ')+" ";
+              closeSection();
             }
             else if(mouseClickWithin(width/2, height/2 - PPCM, 2*PPCM, PPCM))
             {
               let current_arr = currently_typed.split(' ');
               current_arr[current_arr.length-1] = suggestions[1];
               currently_typed = current_arr.join(' ')+" "; 
+              closeSection();
             }
             else if(mouseClickWithin(width/2 - 2*PPCM, height/2, 2*PPCM, PPCM))
             {
               let current_arr = currently_typed.split(' ');
               current_arr[current_arr.length-1] = suggestions[2];
               currently_typed = current_arr.join(' ')+" "; 
+              closeSection();
             }
             else if(mouseClickWithin(width/2, height/2 , 2*PPCM, PPCM))
             {
               let current_arr = currently_typed.split(' ');
               current_arr[current_arr.length-1] = suggestions[3];
-              currently_typed = current_arr.join(' ')+" "; 
+              currently_typed = current_arr.join(' ')+" ";
+              closeSection();
             }
             else if(mouseClickWithin(width/2 - PPCM, height/2 + PPCM, (3/2)*PPCM, PPCM))
-              currently_typed += ' ';        
+            {
+              currently_typed += ' ';
+              closeSection();
+            }
+            else
+              closeSection();
           }
           else if(drawABC)
           {
@@ -433,6 +437,8 @@ function mousePressed()
               currently_typed += 'b';
             else if(mouseClickWithin(width/2 - PPCM, height/2 + (1/2)*PPCM, (3/2)*PPCM, (3/2)*PPCM))
               currently_typed += 'c';
+            
+            closeSection();
           }
           else if(drawDEF)
           {
@@ -441,7 +447,9 @@ function mousePressed()
             else if(mouseClickWithin(width/2 + (1/2)*PPCM, height/2 - PPCM, (3/2)*PPCM, (3/2)*PPCM))
               currently_typed += 'e';
             else if(mouseClickWithin(width/2 - PPCM, height/2 + (1/2)*PPCM, (3/2)*PPCM, (3/2)*PPCM))
-              currently_typed += 'f';         
+              currently_typed += 'f';
+            
+            closeSection();
           }
           else if(drawGHI)
           {
@@ -450,7 +458,9 @@ function mousePressed()
             else if(mouseClickWithin(width/2 + (1/2)*PPCM, height/2 - PPCM, (3/2)*PPCM, (3/2)*PPCM))
               currently_typed += 'h';
             else if(mouseClickWithin(width/2 - PPCM, height/2 + (1/2)*PPCM, (3/2)*PPCM, (3/2)*PPCM))
-              currently_typed += 'i';         
+              currently_typed += 'i';
+            
+            closeSection();
           }
           else if(drawJKL)
           {
@@ -459,7 +469,9 @@ function mousePressed()
             else if(mouseClickWithin(width/2 + (1/2)*PPCM, height/2 - PPCM, (3/2)*PPCM, (3/2)*PPCM))
               currently_typed += 'k';
             else if(mouseClickWithin(width/2 - PPCM, height/2 + (1/2)*PPCM, (3/2)*PPCM, (3/2)*PPCM))
-              currently_typed += 'l';         
+              currently_typed += 'l';
+            
+            closeSection();
           }
           else if(drawMNO)
           {
@@ -468,7 +480,9 @@ function mousePressed()
             else if(mouseClickWithin(width/2 + (1/2)*PPCM, height/2 - PPCM, (3/2)*PPCM, (3/2)*PPCM))
               currently_typed += 'n';
             else if(mouseClickWithin(width/2 - PPCM, height/2 + (1/2)*PPCM, (3/2)*PPCM, (3/2)*PPCM))
-              currently_typed += 'o';         
+              currently_typed += 'o'; 
+            
+            closeSection();
           }
           else if(drawPQRS)
           {
@@ -479,7 +493,9 @@ function mousePressed()
             else if(mouseClickWithin(width/2 - PPCM, height/2 + (1/2)*PPCM, (3/2)*PPCM, (3/2)*PPCM))
               currently_typed += 'r';
             else if(mouseClickWithin(width/2 + (1/2)*PPCM, height/2 + (1/2)*PPCM, (3/2)*PPCM, (3/2)*PPCM))
-              currently_typed += 's'; 
+              currently_typed += 's';
+            
+            closeSection();
           }
           else if(drawTUV)
           {
@@ -488,7 +504,9 @@ function mousePressed()
             else if(mouseClickWithin(width/2 + (1/2)*PPCM, height/2 - PPCM, (3/2)*PPCM, (3/2)*PPCM))
               currently_typed += 'u';
             else if(mouseClickWithin(width/2 - PPCM, height/2 + (1/2)*PPCM, (3/2)*PPCM, (3/2)*PPCM))
-              currently_typed += 'v';         
+              currently_typed += 'v'; 
+            
+            closeSection();
           }
           else if(drawWXYZ)
           {
@@ -499,19 +517,11 @@ function mousePressed()
             else if(mouseClickWithin(width/2 - PPCM, height/2 + (1/2)*PPCM, (3/2)*PPCM, (3/2)*PPCM))
               currently_typed += 'y';
             else if(mouseClickWithin(width/2 + (1/2)*PPCM, height/2 + (1/2)*PPCM, (3/2)*PPCM, (3/2)*PPCM))
-              currently_typed += 'z';           
+              currently_typed += 'z'; 
+            
+            closeSection();
           }
           
-            draw_Options = false;
-            drawSymbs = false;
-            drawABC = false;
-            drawDEF = false;
-            drawGHI = false;
-            drawJKL = false;
-            drawMNO = false;
-            drawPQRS = false;
-            drawTUV = false;
-            drawWXYZ = false;
         }
       }
     }
@@ -526,6 +536,8 @@ function mousePressed()
       errors += computeLevenshteinDistance(currently_typed.trim(), target_phrase.trim());
       entered[current_trial] = currently_typed;
       trial_end_time = millis();
+      
+      closeSection();
 
       current_trial++;
 
@@ -570,7 +582,7 @@ function auto_complete1w(word, n_found, found_words){
   let ret = found_words;
   for (let i = 0; n < 4 && i < common.length; i++){
     let suggestion = common[i];
-    if (word === suggestion.substring(0,len) && word !== suggestion && !ret.includes(suggestion) && suggestion.length < 14){
+    if (word === suggestion.substring(0,len) && word !== suggestion && !ret.includes(suggestion) && suggestion.length < 15){ //para nao dar overlap ou sair do ecra
       ret[n] = suggestion;
       n++;
     }
@@ -584,10 +596,10 @@ function auto_complete2w(past_word, current_word){
   let len = current_word.length;
   let ret = [];
   let last_i = 1;
-  for (let i = 0; n < 4 && i < common2w.length; i++){
+  for (let i = 0; n < 2 && i < common2w.length; i++){
     if (past_word == common2w[i][0]){
       let suggestion = common2w[i][1];
-      if (current_word === suggestion.substring(0,len) && current_word !== suggestion && suggestion.length < 14){
+      if (current_word === suggestion.substring(0,len) && current_word !== suggestion && suggestion.length < 15){
         ret[n] = suggestion;
         n++;
       }
